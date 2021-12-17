@@ -17,5 +17,6 @@ module.exports = {
     'no-console': 'off',
     'class-methods-use-this': 'off',
     'eslintno-unused-vars': 'on',
+    'no-params-reassing': 'off',
   },
 };
