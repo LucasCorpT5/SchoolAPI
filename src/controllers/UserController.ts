@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import prisma from "../prisma/index";
-import verific from "../models/verification";
 import { hash, compare } from "bcryptjs";
 
 class UserController {
@@ -35,7 +34,21 @@ class UserController {
   }
   async index(req: Request, res: Response) {
     try {
-
+      const users = await prisma.users.findMany();
+      res.json(users);
+    } catch (err) {
+      console.log(`Error: ${err}`);
+    }
+  }
+  async show(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const user = await prisma.users.findUnique({
+        where: {
+          id: id
+        }
+      });
+      res.json(user);
     } catch (err) {
       console.log(`Error: ${err}`);
     }
