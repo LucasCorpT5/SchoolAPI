@@ -1,11 +1,18 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
 
 generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+model Alunos {
+  id         String   @id @default(cuid())
+  name       String
+  surname    String
+  email      String
+  age        Int
+  created_at DateTime
+  updated_at DateTime
 }
