@@ -7,7 +7,7 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Alunos {
+model Student {
   id         String   @id @default(cuid())
   name       String
   surname    String
