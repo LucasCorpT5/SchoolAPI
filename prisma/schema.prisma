@@ -8,11 +8,21 @@ generator client {
 }
 
 model Student {
-  id         Int       @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   name       String
   surname    String
-  email      String    @unique
+  email      String   @unique
+  password   String
   age        Int
-  created_at DateTime?
-  updated_at DateTime?
+  created_at DateTime
+  updated_at DateTime
+}
+
+model Users {
+  id         Int      @id @default(autoincrement())
+  name       String
+  email      String   @unique
+  password   String
+  created_at DateTime
+  updated_at DateTime
 }
