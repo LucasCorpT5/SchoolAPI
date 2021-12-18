@@ -5,10 +5,9 @@ import { hash, compare } from "bcryptjs";
 class UserController {
   async create(req: Request, res: Response) {
     try {
+      const { name, email } = req.body;
       let password = req.body.password;
       password = await hash(password, 10);
-      const email = req.body.email;
-      const name = req.body.name;
       if (!password) {
         res.json("Invalid password");
       }
@@ -93,7 +92,7 @@ class UserController {
         id: id
       }
     });
-    res.json(deleteUser);
+    res.json({ Response: "Usuario deletado" });
   }
 }
 
