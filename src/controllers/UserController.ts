@@ -34,7 +34,11 @@ class UserController {
   }
   async index(req: Request, res: Response) {
     try {
-      const users = await prisma.users.findMany();
+      const users = await prisma.users.findMany({
+        orderBy: {
+          created_at: "asc",
+        }
+      });
       res.json(users);
     } catch (err) {
       console.log(`Error: ${err}`);
@@ -46,9 +50,38 @@ class UserController {
       const user = await prisma.users.findUnique({
         where: {
           id: id
-        }
+        },
       });
       res.json(user);
+    } catch (err) {
+      console.log(`Error: ${err}`);
+    }
+  }
+  async update(req: Request, res: Response) {
+    try {
+      const { id, name, email } = req.body;
+      let password = req.body.password;
+      password = await hash(password, 10);
+      const updateUser = await prisma.users.update({
+        where: {
+          id: id
+        },
+        data: {
+          name: name,
+          email: email,
+          password: password
+        }
+      });
+      if (!name) {
+        res.json("Invalid name");
+      }
+      if (!password) {
+        res.json("Invalid password");
+      }
+      if (!email) {
+        res.json("Invalid email")
+      }
+      res.json(updateUser);
     } catch (err) {
       console.log(`Error: ${err}`);
     }
