@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, response, Response } from "express";
 import prisma from "../prisma/index";
 import { hash, compare } from "bcryptjs";
 
@@ -36,7 +36,7 @@ class UserController {
     try {
       const users = await prisma.users.findMany({
         orderBy: {
-          created_at: "asc",
+          created_at: "desc",
         }
       });
       res.json(users);
@@ -79,12 +79,21 @@ class UserController {
         res.json("Invalid password");
       }
       if (!email) {
-        res.json("Invalid email")
+        res.json("Invalid email");
       }
       res.json(updateUser);
     } catch (err) {
       console.log(`Error: ${err}`);
     }
+  }
+  async delete(req: Request, res: Response) {
+    const id = req.body.id;
+    const deleteUser = await prisma.users.delete({
+      where: {
+        id: id
+      }
+    });
+    res.json(deleteUser);
   }
 }
 
