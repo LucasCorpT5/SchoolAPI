@@ -4,9 +4,9 @@ import { ensureAuthenticated } from '../middlewares/esureAuthenticated';
 
 const router = Router();
 
+router.get('/', ensureAuthenticated, userController.show);
+router.get('/logs', ensureAuthenticated, userController.index);
 router.post('/', userController.create);
-router.get('/', ensureAuthenticated, userController.index);
-router.get('/:id', ensureAuthenticated, userController.show);
 router.put('/', ensureAuthenticated, userController.update);
 router.delete('/', ensureAuthenticated, userController.delete);
 

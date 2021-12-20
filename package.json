@@ -13,6 +13,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "class-validator": "^0.13.2",
+    "cuuid": "^0.3.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "jest": "^27.4.5",

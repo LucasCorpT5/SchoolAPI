@@ -8,7 +8,7 @@ generator client {
 }
 
 model Student {
-  id         String   @id @default(cuid())
+  id         String   @id @default(uuid())
   name       String
   surname    String
   email      String   @unique
@@ -19,10 +19,11 @@ model Student {
 }
 
 model Users {
-  id         String   @id @default(cuid())
+  id         String   @id @default(uuid())
   name       String
   email      String   @unique
   password   String
+  secret_key String   @unique
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }

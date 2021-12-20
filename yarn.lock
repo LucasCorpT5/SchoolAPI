@@ -1297,6 +1297,11 @@ cssstyle@^2.3.0:
   dependencies:
     cssom "~0.3.6"
 
+cuuid@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/cuuid/-/cuuid-0.3.0.tgz#b869475fbc8cf243b84e3ddcf8fafebb2cdfa0ad"
+  integrity sha512-BkWAz+vTdaRRDEz7ZMictvxdPkl8DJeghLhXTQ73otHlEb/vPREYIIfSYs0XbBu4Zyhm/Yt9p9Vg5FcT/kEkFQ==
+
 data-urls@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/data-urls/-/data-urls-2.0.0.tgz#156485a72963a970f5d5821aaf642bef2bf2db9b"

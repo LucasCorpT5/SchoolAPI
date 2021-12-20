@@ -1,28 +1,30 @@
 import { Request, response, Response } from "express";
 import prisma from "../prisma/index";
 import { hash, compare } from "bcryptjs";
+import { ensureAuthenticated } from "../middlewares/esureAuthenticated";
 
 class UserController {
   async create(req: Request, res: Response) {
     try {
-      const { name, email } = req.body;
+      const { name, email, secret_key } = req.body;
       let password = req.body.password;
       password = await hash(password, 10);
       if (!password) {
-        res.json("Invalid password");
+        res.status(401).json("Invalid password");
       }
       if (!name) {
-        res.json("Invalid name");
+        res.status(401).json("Invalid name");
       }
       // const email = req.body.email;
       // const password = req.body.password;
       if (!email) {
-        res.json("Invalid email");
+        res.status(401).json("Invalid email");
       }
       const newUser = await prisma.users.create({
         data: {
           name: name,
           email: email,
+          secret_key: secret_key,
           password: password
         }
       });
@@ -31,34 +33,30 @@ class UserController {
       console.log(`Error: ${err}`);
     }
   }
-  async index(req: Request, res: Response) {
-    try {
-      const users = await prisma.users.findMany({
-        orderBy: {
-          created_at: "desc",
-        }
-      });
-      res.json(users);
-    } catch (err) {
-      console.log(`Error: ${err}`);
-    }
-  }
+
   async show(req: Request, res: Response) {
     try {
-      const { id } = req.params;
+      const { id } = req.body;
+
       const user = await prisma.users.findUnique({
         where: {
-          id: id
+          id: id,
         },
+        select: {
+          id: true,
+          name: true,
+          email: true
+        }
       });
       res.json(user);
     } catch (err) {
       console.log(`Error: ${err}`);
     }
   }
+
   async update(req: Request, res: Response) {
     try {
-      const { id, name, email } = req.body;
+      const { name, email, id } = req.body;
       let password = req.body.password;
       password = await hash(password, 10);
       const updateUser = await prisma.users.update({
@@ -66,32 +64,42 @@ class UserController {
           id: id
         },
         data: {
-          name: name,
           email: email,
-          password: password
-        }
+          name: name,
+          password: password,
+        },
       });
-      if (!name) {
-        res.json("Invalid name");
-      }
-      if (!password) {
-        res.json("Invalid password");
-      }
-      if (!email) {
-        res.json("Invalid email");
-      }
+
       res.json(updateUser);
     } catch (err) {
       console.log(`Error: ${err}`);
     }
   }
+
+  async index(req: Request, res: Response) {
+    try {
+      const showinfo = await prisma.users.findMany({
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          password: true,
+        }
+      });
+      res.json(showinfo);
+    } catch (err) {
+      console.log(`Error: ${err}`);
+    }
+  }
+
   async delete(req: Request, res: Response) {
     const id = req.body.id;
     const deleteUser = await prisma.users.delete({
       where: {
         id: id
-      }
+      },
     });
+
     res.json({ Response: "Usuario deletado" });
   }
 }

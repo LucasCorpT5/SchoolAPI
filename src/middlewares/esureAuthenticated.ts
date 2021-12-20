@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction, response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { verify } from "jsonwebtoken";
 
 export function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
@@ -20,7 +20,7 @@ export function ensureAuthenticated(req: Request, res: Response, next: NextFunct
     return next();
   } catch (err) {
     return res.status(401).json({
-      errorCode: "Expired token"
+      errorCode: "Expired token",
     })
   }
 }
