@@ -1,7 +1,6 @@
 import { Request, response, Response } from "express";
 import prisma from "../prisma/index";
 import { hash, compare } from "bcryptjs";
-import { ensureAuthenticated } from "../middlewares/esureAuthenticated";
 
 class UserController {
   async create(req: Request, res: Response) {
@@ -24,7 +23,6 @@ class UserController {
         data: {
           name: name,
           email: email,
-          secret_key: secret_key,
           password: password
         }
       });
@@ -36,7 +34,7 @@ class UserController {
 
   async show(req: Request, res: Response) {
     try {
-      const { id } = req.body;
+      const { id } = req.params;
 
       const user = await prisma.users.findUnique({
         where: {
@@ -69,27 +67,22 @@ class UserController {
           password: password,
         },
       });
-
-      res.json(updateUser);
+      res.status(200).json(updateUser);
     } catch (err) {
       console.log(`Error: ${err}`);
     }
   }
 
   async index(req: Request, res: Response) {
-    try {
-      const showinfo = await prisma.users.findMany({
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          password: true,
-        }
-      });
-      res.json(showinfo);
-    } catch (err) {
-      console.log(`Error: ${err}`);
-    }
+    const userFind = await prisma.users.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      }
+    });
+
+    res.json(userFind);
   }
 
   async delete(req: Request, res: Response) {

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { verify } from "jsonwebtoken";
+import prisma from "../prisma/index";
 
 export function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
   const authToken = req.headers.authorization;
@@ -13,9 +14,22 @@ export function ensureAuthenticated(req: Request, res: Response, next: NextFunct
   const [, token] = authToken.split(" ");
 
   try {
-    const { sub } = verify(token, process.env.TOKEN_SECRET);
+    const dados = verify(token, process.env.TOKEN_SECRET);
+    const { id, email } = dados;
+    const user = prisma.users.findFirst({
+      where: {
+        id: id,
+        email: email
+      }
+    });
 
-    req.id = sub;
+    if (!user) {
+      return res.status(401).json({
+        errorCode: "Invalid user",
+      })
+    }
+
+    req.id = dados;
 
     return next();
   } catch (err) {
